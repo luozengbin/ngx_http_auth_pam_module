@@ -208,7 +208,7 @@ ngx_http_auth_pam_handler(ngx_http_request_t *r)
     ngx_http_auth_pam_ctx_t  *ctx;
     ngx_http_auth_pam_loc_conf_t  *alcf;
 
-    ngx_http_variable_value_t *vflag;
+    /* ngx_http_variable_value_t *vflag; */
     ngx_str_t  key = ngx_string("skip_pam_auth");
     /* vflag = ngx_http_get_variable(r, &key, ngx_hash_key(key.data, key.len)); */
 
