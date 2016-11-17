@@ -212,12 +212,10 @@ ngx_http_auth_pam_handler(ngx_http_request_t *r)
     ngx_str_t  key = ngx_string("skip_pam_auth");
     vflag = ngx_http_get_variable(r, &key, ngx_hash_key(key.data, key.len));
     ngx_log_error(NGX_LOG_DEBUG, r->connection->log, 0, "skip_pam_auth:%s", vflag->data);
-    return NGX_OK;
 
-
-    /* if(ngx_strcmp(vflag->data, "true") == 0) { */
-    /*     return NGX_OK; */
-    /* } */
+    if(ngx_strcmp(vflag->data, "1") == 0) {
+         return NGX_OK;
+    }
 
     alcf = ngx_http_get_module_loc_conf(r, ngx_http_auth_pam_module);
 
