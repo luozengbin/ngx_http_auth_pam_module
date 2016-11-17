@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2008-2016 Sergio Talens-Oliag <sto@iti.es>
- *
+ * Copyright (C) 2016-2016 Luo ZengBin <jalen.cn@gmail.com>
+ * 
  * Based on nginx's 'ngx_http_auth_basic_module.c' by Igor Sysoev and apache's
  * 'mod_auth_pam.c' by Ingo Luetkebolhe.
  *
@@ -207,6 +208,13 @@ ngx_http_auth_pam_handler(ngx_http_request_t *r)
     ngx_http_auth_pam_ctx_t  *ctx;
     ngx_http_auth_pam_loc_conf_t  *alcf;
 
+    ngx_http_variable_value_t *vflag;
+    ngx_str_t  key = ngx_string("skip_pam_auth");
+    vflag = ngx_http_get_variable(r, &key, ngx_hash_key(key.data, key.len));
+    if(ngx_strcmp(vflag->data, "true") == 0) {
+        return NGX_OK;
+    }
+
     alcf = ngx_http_get_module_loc_conf(r, ngx_http_auth_pam_module);
 
     if (alcf->realm.len == 0) {
@@ -355,14 +363,14 @@ ngx_http_auth_pam_authenticate(ngx_http_request_t *r,
         return ngx_http_auth_pam_set_realm(r, &alcf->realm);
     }   /* endif authenticate */
 
-    /* check that the account is healthy */
+    /* // check that the account is healthy
     if ((rc = pam_acct_mgmt(pamh, PAM_DISALLOW_NULL_AUTHTOK)) != PAM_SUCCESS) {
         ngx_log_debug2(NGX_LOG_DEBUG_HTTP, r->connection->log, 0,
                       "PAM: user '%s'  - invalid account: %s",
                       ainfo.username.data, pam_strerror(pamh, rc));
         pam_end(pamh, PAM_SUCCESS);
         return ngx_http_auth_pam_set_realm(r, &alcf->realm);
-    }
+    }*/
 
     pam_end(pamh, PAM_SUCCESS);
     return NGX_OK;
